@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="h5.dao.H5UserAnswerDAO">
+
+	<insert id="insert" parameterType="h5.domain.H5UserAnswerDomain"
+		flushCache="true" >
+		insert into
+		h5_user_answer(ID,optionsRadios0,optionsRadios1,optionsRadios2,optionsRadios3,optionsRadios4,optionsRadios5,optionsRadios6,optionsRadios7)
+		values
+		(#{id},#{optionsRadios0},#{optionsRadios1},#{optionsRadios2},#{optionsRadios3},#{optionsRadios4},#{optionsRadios5},#{optionsRadios6},#{optionsRadios7})
+	</insert>
+
+</mapper>

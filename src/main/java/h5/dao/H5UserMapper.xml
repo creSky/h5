@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="h5.dao.H5UserDAO">
+
+	<insert id="insert" parameterType="h5.domain.H5UserDomain" useGeneratedKeys="true" keyProperty="id"
+		flushCache="true" >
+		insert into
+		h5_user(NAME,AGE,SEX,DATE)
+		values
+		(#{name},#{age},#{sex},#{date})
+	</insert>
+	
+	<select id="findSex" parameterType="int" resultType="int"
+		flushCache="true" >
+		select sex from h5_user
+		<where>
+			and id = #{id}
+
+		</where>
+	</select>
+	
+	<select id="findName" parameterType="int" resultType="String"
+		flushCache="true" >
+		select name from h5_user
+		<where>
+			and id = #{id}
+
+		</where>
+	</select>
+
+</mapper>

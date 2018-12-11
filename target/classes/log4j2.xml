@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="warn">
+	<appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+
+		<Console name="ConsoleError" target="SYSTEM_ERR">
+			<ThresholdFilter level="info" onMatch="ACCEPT"
+				onMismatch="DENY" />
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+
+		<File name="ERROR" fileName="logs/error.log">
+			<ThresholdFilter level="error" onMatch="ACCEPT"
+				onMismatch="DENY" />
+			<PatternLayout
+				pattern="%d{yyyy.MM.dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n" />
+		</File>
+
+		<File name="default" fileName="logs/default.log">
+			<ThresholdFilter level="info" onMatch="ACCEPT"
+				onMismatch="DENY" />
+			<PatternLayout
+				pattern="%d{yyyy.MM.dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n" />
+		</File>
+
+		<RollingFile name="DB" fileName="logs/db/db.log"
+			filePattern="logs/db/$${date:yyyy-MM}/app-%d{MM-dd-yyyy}-%i.log.gz">
+			<PatternLayout
+				pattern="%d{yyyy.MM.dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n" />
+			<SizeBasedTriggeringPolicy size="50 MB" />
+		</RollingFile>
+
+		<RollingFile name="IO" fileName="logs/io/io.log"
+			filePattern="logs/io/io-%d{MM-dd-yyyy}.log.gz">
+			<PatternLayout>
+				<Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+			</PatternLayout>
+			<TimeBasedTriggeringPolicy />
+		</RollingFile>
+
+		<RollingFile name="main" fileName="logs/main/main.log"
+			filePattern="logs/main/main-%d{MM-dd-yyyy}.log.gz">
+			<PatternLayout>
+				<Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+			</PatternLayout>
+			<TimeBasedTriggeringPolicy />
+		</RollingFile>
+
+	</appenders>
+	<loggers>
+		<!-- <root level="debug"> -->
+		<root level="info">
+			<appender-ref ref="Console" />
+		</root>
+
+		<Logger name="main" level="trace" additivity="false">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="main" />
+		</Logger>
+
+		<Logger name="default" level="error" additivity="false">
+			<AppenderRef ref="default" />
+		</Logger>
+
+		<Logger name="ConsoleError" level="trace" additivity="false">
+			<AppenderRef ref="ConsoleError" />
+		</Logger>
+
+		<Logger name="ERROR" level="trace" additivity="false">
+			<AppenderRef ref="ERROR" />
+		</Logger>
+
+		<Logger name="DB" level="trace" additivity="false">
+			<AppenderRef ref="DB" />
+		</Logger>
+
+		<Logger name="IO" level="trace" additivity="false">
+			<AppenderRef ref="Console" />
+			<AppenderRef ref="IO" />
+		</Logger>
+	</loggers>
+</configuration> 

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+         
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1 user-scalable=no">
+        <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+        <title>来自青岛CBD万达1903年的时光邮件</title>
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+        <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+        <!--[if lt IE 9]>
+          <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+        <![endif]-->
+       
+     <style type="text/css">
+            html{}
+            body{height: 100%;
+            }
+            .carousel{
+                width:200px;
+                height:200px;
+                margin:0 auto;
+                margin-top:90px;
+                margin-bottom:10px;
+            }
+            .file {
+                position: relative;
+                /*    display: inline-block;*/
+                background: #337ab7;
+
+                border-radius: 4px;
+                padding: 8px 12px;
+                margin-top:20px;
+                overflow: hidden;
+                color: #FFF;
+                text-decoration: none;
+                text-indent: 0;
+                line-height: 20px;
+            }
+            .file input {
+                position: absolute;
+                font-size: 100px;
+                right: 0;
+                top: 0;
+                opacity: 0;
+            }
+            .file:hover {
+                background: #AADFFD;
+                border-color: #78C3F3;
+                color: #004974;
+                text-decoration: none;
+            }
+        </style>
+    </head>
+    <body  style="
+          background:url(img/upload.jpg);
+          background-size:cover;
+          background-repeat:no-repeat;">
+        <audio id="bgMusic" src="audio/backMusic.mp3" autoplay="autoplay"></audio>
+         <div id="myCarousel" class="carousel slide">
+                <p> 
+                    <img onclick="just()" src="img/just.png" alt="" align="right" > 
+                </p> 
+                 <img  id="img" src="img/touxiang.png" alt="" style="width:200px;height:200px;">
+                <a href="javascript:;" class="file">选择照片
+                    <input type="file" multiple name="image" class="file" accept="image/*" id="file"  onchange="showPicture(this)">
+                </a>
+                <input class="btn btn-primary" style='margin-left:30px;' id="button" type="button" value="点击上传" />
+        
+        </div> 
+ 
+        <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+         <script src="js/jquery.showLoading.min.js"></script>
+        <script>
+        var id = getUrlParam('id');
+        
+        var count = 0;
+                $('#button').on('click', function () {
+                	debugger;
+                	var base64Codes;
+//                     var filePath = $('#img')[0].src, //获取到input的value，里面是文件的路径
+//                         fileFormat = filePath.substring(filePath.lastIndexOf(".")).toLowerCase(),
+                        imgBase64 = '', //存储图片的imgBase64
+                        fileObj = document.getElementById('file').files[0]; //上传文件的对象,要这样写才行，用jquery写法获取不到对象
+                        debugger;
+                    // 检查是否是图片
+//                     if (!fileFormat.match(/.png|.jpg|.jpeg/)) {
+//                         alert('上传错误,文件格式必须为：png/jpg/jpeg');
+//                         return;
+//                     }
+                    debugger;
+                    if(fileObj.size > 2*1024*1024) { //大于2M，进行压缩上传
+                    	  photoCompress(fileObj, { quality: 0.7},
+                    			  function (base64Codes){
+                    		  var data = {
+                                      "base64File":base64Codes,
+                                     'count':count,
+                                    'id':id
+                              };
+
+                            options = {
+                                type:"post",
+                                data:data,
+                                url: "h5UserController.do?method=uploadImg",
+                                dataType: 'json',
+                                success:function(result){
+                                    console.log(JSON.stringify(result));
+                                }
+                            };
+                            $.ajax(options);
+                        	debugger;
+                           // $('#viewImg').attr('src', base64Codes); //显示预览图片
+                        });
+                    
+	                }else{
+                    	 photoCompress(fileObj, { quality: 1},
+                    			 function (base64Codes){
+                         	var data = {
+                                     "base64File":base64Codes,
+                                    'count':count,
+                                   'id':id
+                             };
+
+                             options = {
+                                 type:"post",
+                                 data:data,
+                                 url: "h5UserController.do?method=uploadImg",
+                                 dataType: 'json',
+                                 success:function(result){
+                                     console.log(JSON.stringify(result));
+                                 }
+                             };
+                             $.ajax(options);
+                         	debugger;
+                         //    $('#viewImg').attr('src', base64Codes); //显示预览图片
+                         }
+                    	 );
+	                }
+                    
+            });
+                    
+                /*
+               	 三个参数
+                file：一个是文件(类型是图片格式)，
+                w：一个是文件压缩的后宽度，宽度越小，字节越小
+                objDiv：一个是容器或者回调函数
+                photoCompress()
+                 */
+                function photoCompress(file,w,objDiv){
+                    var ready=new FileReader();
+                    /*开始读取指定的Blob对象或File对象中的内容. 当读取操作完成时,readyState属性的值会成为DONE,如果设置了onloadend事件处理程序,则调用之.同时,result属性中将包含一个data: URL格式的字符串以表示所读取文件的内容.*/
+                    ready.readAsDataURL(file);
+                    ready.onload=function(){
+                        var re=this.result;
+                        canvasDataURL(re,w,objDiv)
+                    }
+                }
+                function canvasDataURL(path, obj, callback){
+                    var img = new Image();
+                    img.src = path;
+                    img.onload = function(){
+                        var that = this;
+                        // 默认按比例压缩
+                        var w = that.width,
+                            h = that.height,
+                            scale = w / h;
+                        w = (obj.width || w)*obj.quality;
+                        h = (obj.height ||h)*obj.quality;
+                        var quality = 0.7;  // 默认图片质量为0.7
+                        //生成canvas
+                        var canvas = document.createElement('canvas');
+                        var ctx = canvas.getContext('2d');
+                        // 创建属性节点
+                        var anw = document.createAttribute("width");
+                        anw.nodeValue = w;
+                        var anh = document.createAttribute("height");
+                        anh.nodeValue = h;
+                        canvas.setAttributeNode(anw);
+                        canvas.setAttributeNode(anh);
+                        ctx.drawImage(that, 0, 0, w, h);
+                        // 图像质量
+                        if(obj.quality && obj.quality <= 1 && obj.quality > 0){
+                            quality = obj.quality;
+                        }
+                        debugger;
+                        // quality值越小，所绘制出的图像越模糊
+                        var base64 = canvas.toDataURL('image/jpeg', quality);
+                        // 回调函数返回base64的值
+                        callback(base64);
+                    }
+                }
+ 
+                
+               
+                function just() {
+                    count++;
+                    if (count == 4) {
+                        count = 0;
+                    }
+                    $('#count').val(count);
+                    var res = count * -90;
+                    $('#img').css('transform', 'rotate(' + res + 'deg)');
+                }
+                // 选择的文件对象
+                function showPicture(imgFile) {
+
+                    /*获取上传文件的路径*/
+                    document.getElementById("img").src = window.URL.createObjectURL(imgFile.files[0]);
+
+                }
+                function getUrlParam(name) {
+                    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+                    var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+                    if (r != null)
+                        return unescape(r[2]);
+                    return null; //返回参数值
+                }
+        </script>
+    </body>
+</html>

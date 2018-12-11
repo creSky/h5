@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1 user-scalable=no">
+        <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+        <title>岛城1903美食街区盛大开业</title>
+        <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- HTML5 shim 和 Respond.js 是为了让 IE8 支持 HTML5 元素和媒体查询（media queries）功能 -->
+        <!-- 警告：通过 file:// 协议（就是直接将 html 页面拖拽到浏览器中）访问页面时 Respond.js 不起作用 -->
+        <!--[if lt IE 9]>
+          <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+        <![endif]-->
+
+        <style type="text/css">
+            html{}
+            body{height: 100%;
+            }
+            .carousel{
+                width:200px;
+                height:200px;
+                margin:0 auto;
+                margin-top:90px;
+                margin-bottom:10px;
+            }
+            .file {
+    position: relative;
+/*    display: inline-block;*/
+    background: #337ab7;
+   
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-top:20px;
+    overflow: hidden;
+    color: #FFF;
+    text-decoration: none;
+    text-indent: 0;
+    line-height: 20px;
+}
+.file input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: -28px;
+    opacity: 0;
+}
+.file:hover {
+    background: #AADFFD;
+    border-color: #78C3F3;
+    color: #004974;
+    text-decoration: none;
+}
+        </style>
+    </head>
+    <body style="
+          background:url(img/upload.jpg);
+          background-size:cover;
+          background-repeat:no-repeat;">
+          <audio id="bgMusic" src="audio/backMusic.mp3" autoplay="autoplay"></audio>
+        <div id="myCarousel" class="carousel slide">
+            <form  id="form" action="h5UserController.do?method=upload" method="post" enctype="multipart/form-data">
+               
+                <p> 
+                    <img onclick="just()" src="img/just.png" alt="" align="right" > 
+                </p> 
+                <input name="count"  id="count" type="hidden" value="0"/>
+                <input name="id"  id="id" type="hidden" />
+                <img  id="img" src="img/touxiang.png" alt="" style="width:200px;height:200px;">
+              <a href="javascript:;" class="file">选择照片
+                 <input type="file" multiple name="file" class="file" accept="image/*" id="file" style="margin-bottom: 10px" onchange="showPicture(this)">
+              </a>
+                <input class="btn btn-primary" style='margin-left:30px;' type="submit" value="点击上传" />
+            </form>
+        </div> 
+
+        <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+        <script src="js/jquery.showLoading.min.js"></script>
+        <script type="text/javascript">
+                        var id = getUrlParam('id');
+                        $('#id').val(id);
+                        var count = 0;
+                        function just() {
+                            count++;
+                            if (count == 4) {
+                                count = 0;
+                            }
+                            $('#count').val(count);
+                            var res = count * -90;
+                            $('#img').css('transform', 'rotate(' + res + 'deg)');
+                        }
+                        // 选择的文件对象
+                        function showPicture(imgFile) {
+                            /*获取上传文件的路径*/
+                            document.getElementById("img").src = window.URL.createObjectURL(imgFile.files[0]);
+
+                        }
+                        function getUrlParam(name) {
+                            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+                            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+                            if (r != null)
+                                return unescape(r[2]);
+                            return null; //返回参数值
+                        }
+        </script>
+    </body>
+</html>
+
